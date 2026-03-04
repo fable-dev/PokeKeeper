@@ -54,3 +54,29 @@ input, select {
     .header-main { flex-direction: column; }
     .controls { flex-direction: column; }
 }
+
+.backup-settings {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid white;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background 0.3s;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+label[for="restoreInput"] {
+    display: inline-block;
+}
