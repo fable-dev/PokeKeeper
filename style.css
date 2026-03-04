@@ -1,0 +1,13 @@
+body { font-family: sans-serif; background: #f4f4f4; text-align: center; }
+header { position: sticky; top: 0; background: white; padding: 1rem; border-bottom: 2px solid #ddd; z-index: 10; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; padding: 20px; }
+
+.card { 
+    background: white; border-radius: 10px; padding: 10px; cursor: pointer;
+    transition: transform 0.2s; border: 2px solid transparent; 
+}
+.card:hover { transform: scale(1.05); }
+.card.owned { border-color: #4CAF50; background: #e8f5e9; }
+.card img { width: 100px; height: 100px; }
+.status-indicator { font-size: 0.8rem; margin-top: 5px; color: #888; }
+.owned .status-indicator { color: #4CAF50; font-weight: bold; }
