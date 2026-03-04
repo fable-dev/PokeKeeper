@@ -75,3 +75,43 @@ statusFilter.addEventListener('change', render);
 searchInput.addEventListener('input', render);
 
 init();
+
+// 1. DOWNLOAD BACKUP
+document.getElementById('downloadBtn').addEventListener('click', () => {
+    const dataStr = JSON.stringify([...ownedIds]); // Convert Set to Array
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    
+    const exportFileDefaultName = 'pokekeeper_backup.json';
+    const linkElement = document.createElement('a');
+    
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+});
+
+// 2. RESTORE FROM BACKUP
+document.getElementById('restoreInput').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const importedIds = JSON.parse(e.target.result);
+            
+            if (Array.isArray(importedIds)) {
+                if (confirm(`Restore ${importedIds.length} caught Pokémon? This will replace your current list.`)) {
+                    ownedIds = new Set(importedIds);
+                    localStorage.setItem('pokeKeeper_owned', JSON.stringify([...ownedIds]));
+                    render();
+                    alert("Progress Restored!");
+                }
+            } else {
+                alert("Invalid file format.");
+            }
+        } catch (err) {
+            alert("Error reading file. Make sure it's a valid JSON backup.");
+        }
+    };
+    reader.readAsText(file);
+});
