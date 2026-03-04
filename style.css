@@ -15,34 +15,30 @@ header {
 
 .header-main { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
 
-/* Dashboard Styling */
-.dashboard {
-    max-width: 1200px; margin: 15px auto;
-    background: rgba(255, 255, 255, 0.15);
-    padding: 15px; border-radius: 12px;
-}
+.dashboard { max-width: 1200px; margin: 15px auto; background: rgba(255, 255, 255, 0.15); padding: 15px; border-radius: 12px; }
+.dash-hint { font-size: 0.7rem; opacity: 0.8; margin-bottom: 8px; text-align: center; }
 
-.progress-container {
-    background: rgba(0,0,0,0.2); height: 12px; border-radius: 10px; overflow: hidden; margin-bottom: 10px;
-}
+.progress-container { background: rgba(0,0,0,0.2); height: 12px; border-radius: 10px; overflow: hidden; margin-bottom: 15px; }
+.progress-bar { height: 100%; background: var(--caught); width: 0%; transition: width 0.5s ease; }
 
-.progress-bar {
-    height: 100%; background: var(--caught); width: 0%; transition: width 0.5s ease-in-out;
-}
-
-.gen-breakdown {
-    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; font-size: 0.75rem;
-}
+.gen-breakdown { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
 
 .gen-stat {
-    background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 15px;
+    background: rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 20px; 
+    cursor: pointer; transition: 0.2s; border: 1px solid rgba(255,255,255,0.2);
+    display: flex; flex-direction: column; align-items: center; min-width: 80px;
 }
 
-/* Rest of your existing CSS remains similar, just ensuring header compatibility */
+.gen-stat:hover { background: rgba(255,255,255,0.3); transform: scale(1.05); }
+.gen-stat.active { background: white; color: var(--primary); font-weight: bold; border-color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+
+.reg-name { font-size: 0.65rem; opacity: 0.9; }
+.reg-count { font-size: 0.85rem; }
+
 .header-right { display: flex; align-items: center; gap: 20px; }
-.quality-toggle { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: bold; }
+.quality-toggle { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; }
 .switch { position: relative; width: 40px; height: 20px; }
-.switch input { opacity: 0; width: 0; height: 0; }
+.switch input { opacity: 0; width: 0; }
 .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px; }
 .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
 input:checked + .slider { background-color: var(--caught); }
@@ -55,8 +51,14 @@ input, select { padding: 10px; border-radius: 8px; border: none; flex: 1; min-wi
 .card { background: white; border-radius: 12px; padding: 15px; text-align: center; transition: 0.2s; cursor: pointer; border: 2px solid transparent; }
 .card.owned { border-color: var(--caught); background: #f1f8e9; }
 .card img { width: 100px; height: 100px; object-fit: contain; }
-.status-btn { margin-top: 10px; font-size: 0.7rem; font-weight: bold; padding: 5px; border-radius: 4px; background: #eee; }
+.poke-name { font-weight: 600; text-transform: capitalize; margin: 5px 0; }
+.status-btn { font-size: 0.7rem; font-weight: bold; padding: 4px; border-radius: 4px; background: #eee; }
 .owned .status-btn { background: var(--caught); color: white; }
 
 .backup-settings { margin-top: 10px; display: flex; justify-content: center; gap: 10px; }
 .btn-secondary { background: rgba(255,255,255,0.2); border: 1px solid white; color: white; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
+
+@media (max-width: 700px) {
+    .header-main { flex-direction: column; gap: 10px; }
+    .controls { flex-direction: column; }
+}
