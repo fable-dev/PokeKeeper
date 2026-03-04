@@ -1,67 +1,77 @@
 const grid = document.getElementById('poke-grid');
 const regionFilter = document.getElementById('regionFilter');
 const statusFilter = document.getElementById('statusFilter');
+const searchInput = document.getElementById('searchInput');
 const countLabel = document.getElementById('count');
+const totalLabel = document.getElementById('total');
 
 let allPokemon = [];
-let ownedIds = JSON.parse(localStorage.getItem('pokeKeeper_owned')) || [];
+let ownedIds = new Set(JSON.parse(localStorage.getItem('pokeKeeper_owned')) || []);
 
-// 1. Load your local JSON file
+// Load the JSON you generated with Python
 async function init() {
     try {
         const response = await fetch('pokemon.json');
         allPokemon = await response.json();
-        document.getElementById('total').innerText = allPokemon.length;
+        totalLabel.innerText = allPokemon.length;
         render();
     } catch (err) {
-        console.error("Error loading JSON. Make sure pokemon.json exists!", err);
+        grid.innerHTML = `<p class="error">Error loading pokemon.json. Did you run the Python script?</p>`;
+        console.error(err);
     }
 }
 
-// 2. Toggle Ownership
 function togglePoke(id) {
-    if (ownedIds.includes(id)) {
-        ownedIds = ownedIds.filter(pokeId => pokeId !== id);
+    if (ownedIds.has(id)) {
+        ownedIds.delete(id);
     } else {
-        ownedIds.push(id);
+        ownedIds.add(id);
     }
-    localStorage.setItem('pokeKeeper_owned', JSON.stringify(ownedIds));
+    // Convert Set back to Array for LocalStorage
+    localStorage.setItem('pokeKeeper_owned', JSON.stringify([...ownedIds]));
     render();
 }
 
-// 3. Render Grid
 function render() {
     const region = regionFilter.value;
     const status = statusFilter.value;
+    const search = searchInput.value.toLowerCase();
     
     grid.innerHTML = '';
-    let visibleCount = 0;
+    const fragment = document.createDocumentFragment();
 
     allPokemon.forEach(poke => {
-        const isOwned = ownedIds.includes(poke.id);
+        const isOwned = ownedIds.has(poke.id);
         
         // Filter Logic
-        const matchRegion = (region === 'all') || (poke.region === region);
+        const matchRegion = (region === 'all' || poke.region === region);
         const matchStatus = (status === 'all') || 
                           (status === 'owned' && isOwned) || 
                           (status === 'missing' && !isOwned);
+        const matchSearch = poke.name.toLowerCase().includes(search) || 
+                           poke.id.toString().includes(search);
 
-        if (matchRegion && matchStatus) {
+        if (matchRegion && matchStatus && matchSearch) {
             const card = document.createElement('div');
             card.className = `card ${isOwned ? 'owned' : ''}`;
-            card.onclick = () => togglePoke(poke.id);
             card.innerHTML = `
-                <img src="${poke.image}" alt="${poke.name}">
-                <p>#${poke.id} <strong>${poke.name}</strong></p>
-                <div class="status-indicator">${isOwned ? '✓ Caught' : '○ Missing'}</div>
+                <div class="poke-id">#${poke.id}</div>
+                <img src="${poke.image}" alt="${poke.name}" loading="lazy">
+                <div class="poke-name">${poke.name}</div>
+                <div class="status-btn">${isOwned ? 'COLLECTED' : 'MARK CAUGHT'}</div>
             `;
-            grid.appendChild(card);
+            card.onclick = () => togglePoke(poke.id);
+            fragment.appendChild(card);
         }
     });
 
-    countLabel.innerText = ownedIds.length;
+    grid.appendChild(fragment);
+    countLabel.innerText = ownedIds.size;
 }
 
-regionFilter.onchange = render;
-statusFilter.onchange = render;
+// Event Listeners for real-time updates
+regionFilter.addEventListener('change', render);
+statusFilter.addEventListener('change', render);
+searchInput.addEventListener('input', render);
+
 init();
