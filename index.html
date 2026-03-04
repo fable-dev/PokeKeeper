@@ -3,34 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PokeKeeper</title>
+    <title>PokeKeeper | National Dex Tracker</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <h1>PokeKeeper</h1>
-        <div class="stats">Caught: <span id="count">0</span> / <span id="total">0</span></div>
+        <div class="header-main">
+            <h1>PokeKeeper</h1>
+            <div class="stats-box">
+                <span class="stat-label">Caught:</span>
+                <span id="count" class="stat-value">0</span> / <span id="total" class="stat-value">0</span>
+            </div>
+        </div>
         
-        <nav class="filters">
-            <select id="regionFilter">
-        <option value="all">All Regions</option>
-        <option value="kanto">Kanto (Gen 1)</option>
-        <option value="johto">Johto (Gen 2)</option>
-        <option value="hoenn">Hoenn (Gen 3)</option>
-        <option value="sinnoh">Sinnoh (Gen 4)</option>
-        <option value="unova">Unova (Gen 5)</option>
-        <option value="kalos">Kalos (Gen 6)</option>
-        <option value="alola">Alola (Gen 7)</option>
-        <option value="galar">Galar (Gen 8)</option>
-        <option value="paldea">Paldea (Gen 9)</option>
-    </select>
+        <div class="controls">
+            <input type="text" id="searchInput" placeholder="Search by name or #ID...">
+            
+            <div class="filters">
+                <select id="regionFilter">
+                    <option value="all">All Regions</option>
+                    <option value="kanto">Kanto (Gen 1)</option>
+                    <option value="johto">Johto (Gen 2)</option>
+                    <option value="hoenn">Hoenn (Gen 3)</option>
+                    <option value="sinnoh">Sinnoh (Gen 4)</option>
+                    <option value="unova">Unova (Gen 5)</option>
+                    <option value="kalos">Kalos (Gen 6)</option>
+                    <option value="alola">Alola (Gen 7)</option>
+                    <option value="galar">Galar (Gen 8)</option>
+                    <option value="paldea">Paldea (Gen 9)</option>
+                </select>
 
-            <select id="statusFilter">
-                <option value="all">Show All</option>
-                <option value="owned">Owned Only</option>
-                <option value="missing">Missing Only</option>
-            </select>
-        </nav>
+                <select id="statusFilter">
+                    <option value="all">Show All</option>
+                    <option value="owned">Owned</option>
+                    <option value="missing">Missing</option>
+                </select>
+            </div>
+        </div>
     </header>
 
     <main id="poke-grid" class="grid"></main>
