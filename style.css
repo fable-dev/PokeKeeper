@@ -1,13 +1,56 @@
-body { font-family: sans-serif; background: #f4f4f4; text-align: center; }
-header { position: sticky; top: 0; background: white; padding: 1rem; border-bottom: 2px solid #ddd; z-index: 10; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; padding: 20px; }
-
-.card { 
-    background: white; border-radius: 10px; padding: 10px; cursor: pointer;
-    transition: transform 0.2s; border: 2px solid transparent; 
+:root {
+    --primary: #ef5350;
+    --caught: #4caf50;
+    --bg: #f0f2f5;
 }
-.card:hover { transform: scale(1.05); }
-.card.owned { border-color: #4CAF50; background: #e8f5e9; }
-.card img { width: 100px; height: 100px; }
-.status-indicator { font-size: 0.8rem; margin-top: 5px; color: #888; }
-.owned .status-indicator { color: #4CAF50; font-weight: bold; }
+
+body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; }
+
+header {
+    background: var(--primary); color: white;
+    padding: 1.5rem; position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.header-main { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
+
+.controls { 
+    max-width: 1200px; margin: 1rem auto 0; 
+    display: flex; gap: 10px; flex-wrap: wrap; 
+}
+
+input, select {
+    padding: 10px; border-radius: 8px; border: none; outline: none; flex: 1; min-width: 200px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px; padding: 20px; max-width: 1200px; margin: 0 auto;
+}
+
+.card {
+    background: white; border-radius: 12px; padding: 15px; text-align: center;
+    transition: all 0.2s ease; cursor: pointer; position: relative;
+    border: 2px solid transparent; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+
+.card.owned { border-color: var(--caught); background: #f1f8e9; }
+
+.poke-id { font-size: 0.7rem; color: #888; font-weight: bold; text-align: left; }
+.poke-name { font-weight: 600; margin-top: 5px; text-transform: capitalize; }
+.card img { width: 90px; height: 90px; }
+
+.status-btn {
+    margin-top: 10px; font-size: 0.7rem; font-weight: bold;
+    padding: 5px; border-radius: 4px; background: #eee; color: #777;
+}
+
+.owned .status-btn { background: var(--caught); color: white; }
+
+@media (max-width: 600px) {
+    .header-main { flex-direction: column; }
+    .controls { flex-direction: column; }
+}
