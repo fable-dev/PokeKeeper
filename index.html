@@ -10,15 +10,25 @@
     <header>
         <div class="header-main">
             <h1>PokeKeeper</h1>
-            <div class="stats-box">
-                <span class="stat-label">Caught:</span>
-                <span id="count" class="stat-value">0</span> / <span id="total" class="stat-value">0</span>
+            
+            <div class="header-right">
+                <div class="quality-toggle">
+                    <span>Lite</span>
+                    <label class="switch">
+                        <input type="checkbox" id="qualitySwitch">
+                        <span class="slider round"></span>
+                    </label>
+                    <span>HD</span>
+                </div>
+                <div class="stats-box">
+                    <span class="stat-label">Caught:</span>
+                    <span id="count" class="stat-value">0</span> / <span id="total" class="stat-value">0</span>
+                </div>
             </div>
         </div>
         
         <div class="controls">
             <input type="text" id="searchInput" placeholder="Search by name or #ID...">
-            
             <div class="filters">
                 <select id="regionFilter">
                     <option value="all">All Regions</option>
@@ -42,10 +52,10 @@
         </div>
 
         <div class="backup-settings">
-    <button id="downloadBtn" class="btn-secondary">Download Backup</button>
-    <label for="restoreInput" class="btn-secondary">Restore from File</label>
-    <input type="file" id="restoreInput" accept=".json" style="display:none">
-</div>
+            <button id="downloadBtn" class="btn-secondary">Download Backup</button>
+            <label for="restoreInput" class="btn-secondary">Restore from File</label>
+            <input type="file" id="restoreInput" accept=".json" style="display:none">
+        </div>
     </header>
 
     <main id="poke-grid" class="grid"></main>
