@@ -2,21 +2,32 @@ const grid = document.getElementById('poke-grid');
 const regionFilter = document.getElementById('regionFilter');
 const statusFilter = document.getElementById('statusFilter');
 const searchInput = document.getElementById('searchInput');
+const qualitySwitch = document.getElementById('qualitySwitch');
 const countLabel = document.getElementById('count');
 const totalLabel = document.getElementById('total');
 
 let allPokemon = [];
 let ownedIds = new Set(JSON.parse(localStorage.getItem('pokeKeeper_owned')) || []);
 
-// Load the JSON you generated with Python
+// Load preference for quality
+const savedQuality = localStorage.getItem('pokeKeeper_quality') === 'hd';
+qualitySwitch.checked = savedQuality;
+
 async function init() {
+    const isHD = qualitySwitch.checked;
+    const fileName = isHD ? 'pokemon_hd.json' : 'pokemon_lite.json';
+    
+    // Save preference
+    localStorage.setItem('pokeKeeper_quality', isHD ? 'hd' : 'lite');
+
     try {
-        const response = await fetch('pokemon.json');
+        grid.innerHTML = '<p class="loading">Loading Pokémon Data...</p>';
+        const response = await fetch(fileName);
         allPokemon = await response.json();
         totalLabel.innerText = allPokemon.length;
         render();
     } catch (err) {
-        grid.innerHTML = `<p class="error">Error loading pokemon.json. Did you run the Python script?</p>`;
+        grid.innerHTML = `<p class="error">Error loading ${fileName}. Check your Python export!</p>`;
         console.error(err);
     }
 }
@@ -27,7 +38,6 @@ function togglePoke(id) {
     } else {
         ownedIds.add(id);
     }
-    // Convert Set back to Array for LocalStorage
     localStorage.setItem('pokeKeeper_owned', JSON.stringify([...ownedIds]));
     render();
 }
@@ -42,8 +52,6 @@ function render() {
 
     allPokemon.forEach(poke => {
         const isOwned = ownedIds.has(poke.id);
-        
-        // Filter Logic
         const matchRegion = (region === 'all' || poke.region === region);
         const matchStatus = (status === 'all') || 
                           (status === 'owned' && isOwned) || 
@@ -69,49 +77,39 @@ function render() {
     countLabel.innerText = ownedIds.size;
 }
 
-// Event Listeners for real-time updates
+// Listeners
 regionFilter.addEventListener('change', render);
 statusFilter.addEventListener('change', render);
 searchInput.addEventListener('input', render);
+qualitySwitch.addEventListener('change', init); // Re-run init to fetch new JSON
 
-init();
-
-// 1. DOWNLOAD BACKUP
+// Backup & Restore Logic
 document.getElementById('downloadBtn').addEventListener('click', () => {
-    const dataStr = JSON.stringify([...ownedIds]); // Convert Set to Array
+    const dataStr = JSON.stringify([...ownedIds]);
     const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-    
-    const exportFileDefaultName = 'pokekeeper_backup.json';
     const linkElement = document.createElement('a');
-    
     linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.setAttribute('download', 'pokekeeper_backup.json');
     linkElement.click();
 });
 
-// 2. RESTORE FROM BACKUP
 document.getElementById('restoreInput').addEventListener('change', function(event) {
     const file = event.target.files[0];
     if (!file) return;
-
     const reader = new FileReader();
     reader.onload = function(e) {
         try {
             const importedIds = JSON.parse(e.target.result);
-            
             if (Array.isArray(importedIds)) {
-                if (confirm(`Restore ${importedIds.length} caught Pokémon? This will replace your current list.`)) {
+                if (confirm(`Restore ${importedIds.length} Pokémon?`)) {
                     ownedIds = new Set(importedIds);
                     localStorage.setItem('pokeKeeper_owned', JSON.stringify([...ownedIds]));
                     render();
-                    alert("Progress Restored!");
                 }
-            } else {
-                alert("Invalid file format.");
             }
-        } catch (err) {
-            alert("Error reading file. Make sure it's a valid JSON backup.");
-        }
+        } catch (err) { alert("Invalid Backup File"); }
     };
     reader.readAsText(file);
 });
+
+init();
