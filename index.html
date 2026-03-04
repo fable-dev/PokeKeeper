@@ -10,7 +10,6 @@
     <header>
         <div class="header-main">
             <h1>PokeKeeper</h1>
-            
             <div class="header-right">
                 <div class="quality-toggle">
                     <span>Lite</span>
@@ -21,11 +20,18 @@
                     <span>HD</span>
                 </div>
                 <div class="stats-box">
-                    <span class="stat-label">Caught:</span>
-                    <span id="count" class="stat-value">0</span> / <span id="total" class="stat-value">0</span>
+                    <span id="percent">0%</span> Complete
                 </div>
             </div>
         </div>
+
+        <section class="dashboard">
+            <div class="progress-container">
+                <div id="progressBar" class="progress-bar"></div>
+            </div>
+            <div id="genBreakdown" class="gen-breakdown">
+                </div>
+        </section>
         
         <div class="controls">
             <input type="text" id="searchInput" placeholder="Search by name or #ID...">
@@ -42,7 +48,6 @@
                     <option value="galar">Galar (Gen 8)</option>
                     <option value="paldea">Paldea (Gen 9)</option>
                 </select>
-
                 <select id="statusFilter">
                     <option value="all">Show All</option>
                     <option value="owned">Owned</option>
