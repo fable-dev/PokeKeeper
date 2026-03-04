@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokeKeeper</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>PokeKeeper</h1>
+        <div class="stats">Caught: <span id="count">0</span> / <span id="total">0</span></div>
+        
+        <nav class="filters">
+            <select id="regionFilter">
+                <option value="all">All Regions</option>
+                <option value="kanto">Kanto (1-151)</option>
+                <option value="johto">Johto (152-251)</option>
+                <option value="hoenn">Hoenn (252-386)</option>
+            </select>
+
+            <select id="statusFilter">
+                <option value="all">Show All</option>
+                <option value="owned">Owned Only</option>
+                <option value="missing">Missing Only</option>
+            </select>
+        </nav>
+    </header>
+
+    <main id="poke-grid" class="grid"></main>
+
+    <script src="script.js"></script>
+</body>
+</html>
