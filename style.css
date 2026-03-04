@@ -8,75 +8,45 @@ body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; }
 
 header {
     background: var(--primary); color: white;
-    padding: 1.5rem; position: sticky; top: 0; z-index: 100;
+    padding: 1rem 1.5rem; position: sticky; top: 0; z-index: 100;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .header-main { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
+.header-right { display: flex; align-items: center; gap: 20px; }
 
-.controls { 
-    max-width: 1200px; margin: 1rem auto 0; 
-    display: flex; gap: 10px; flex-wrap: wrap; 
-}
+/* The Toggle Switch */
+.quality-toggle { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: bold; }
+.switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px; }
+.slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+input:checked + .slider { background-color: var(--caught); }
+input:checked + .slider:before { transform: translateX(20px); }
 
-input, select {
-    padding: 10px; border-radius: 8px; border: none; outline: none; flex: 1; min-width: 200px;
-}
+.stats-box { background: rgba(0,0,0,0.1); padding: 5px 12px; border-radius: 20px; }
+.stat-value { font-weight: bold; }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 15px; padding: 20px; max-width: 1200px; margin: 0 auto;
-}
+.controls { max-width: 1200px; margin: 1rem auto 0; display: flex; gap: 10px; flex-wrap: wrap; }
+input, select { padding: 10px; border-radius: 8px; border: none; outline: none; flex: 1; min-width: 150px; }
 
-.card {
-    background: white; border-radius: 12px; padding: 15px; text-align: center;
-    transition: all 0.2s ease; cursor: pointer; position: relative;
-    border: 2px solid transparent; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; padding: 20px; max-width: 1200px; margin: 0 auto; }
 
+.card { background: white; border-radius: 12px; padding: 15px; text-align: center; transition: 0.2s; cursor: pointer; border: 2px solid transparent; }
 .card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
-
 .card.owned { border-color: var(--caught); background: #f1f8e9; }
+.card img { width: 100px; height: 100px; object-fit: contain; }
 
 .poke-id { font-size: 0.7rem; color: #888; font-weight: bold; text-align: left; }
 .poke-name { font-weight: 600; margin-top: 5px; text-transform: capitalize; }
-.card img { width: 90px; height: 90px; }
-
-.status-btn {
-    margin-top: 10px; font-size: 0.7rem; font-weight: bold;
-    padding: 5px; border-radius: 4px; background: #eee; color: #777;
-}
-
+.status-btn { margin-top: 10px; font-size: 0.7rem; font-weight: bold; padding: 5px; border-radius: 4px; background: #eee; color: #777; }
 .owned .status-btn { background: var(--caught); color: white; }
 
-@media (max-width: 600px) {
-    .header-main { flex-direction: column; }
+.backup-settings { margin-top: 15px; display: flex; justify-content: center; gap: 10px; }
+.btn-secondary { background: rgba(255, 255, 255, 0.2); border: 1px solid white; color: white; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
+.btn-secondary:hover { background: rgba(255, 255, 255, 0.4); }
+
+@media (max-width: 700px) {
+    .header-main { flex-direction: column; gap: 10px; }
     .controls { flex-direction: column; }
-}
-
-.backup-settings {
-    margin-top: 15px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
-.btn-secondary {
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid white;
-    color: white;
-    padding: 8px 15px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    transition: background 0.3s;
-}
-
-.btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.4);
-}
-
-label[for="restoreInput"] {
-    display: inline-block;
 }
