@@ -9,6 +9,7 @@ const genBreakdown = document.getElementById('genBreakdown');
 
 let allPokemon = [];
 let ownedIds = new Set(JSON.parse(localStorage.getItem('pokeKeeper_owned')) || []);
+let activeDashFilter = "all";
 
 // Quality Preference
 qualitySwitch.checked = localStorage.getItem('pokeKeeper_quality') === 'hd';
@@ -19,7 +20,6 @@ async function init() {
     localStorage.setItem('pokeKeeper_quality', isHD ? 'hd' : 'lite');
 
     try {
-        grid.innerHTML = '<p>Loading Dex Data...</p>';
         const response = await fetch(fileName);
         allPokemon = await response.json();
         render();
@@ -33,34 +33,44 @@ function calculateStats() {
     const caught = ownedIds.size;
     const percent = total > 0 ? Math.round((caught / total) * 100) : 0;
     
-    // Update main progress bar
     progressBar.style.width = `${percent}%`;
     percentLabel.innerText = `${percent}% (${caught}/${total})`;
 
-    // Calculate Region Breakdown
-    const regions = [...new Set(allPokemon.map(p => p.region))];
+    const regions = ["kanto", "johto", "hoenn", "sinnoh", "unova", "kalos", "alola", "galar", "paldea"];
     genBreakdown.innerHTML = '';
     
     regions.forEach(reg => {
         const regPokes = allPokemon.filter(p => p.region === reg);
+        if (regPokes.length === 0) return;
+
         const regCaught = regPokes.filter(p => ownedIds.has(p.id)).length;
-        const regSpan = document.createElement('span');
-        regSpan.className = 'gen-stat';
-        regSpan.innerHTML = `<strong>${reg.toUpperCase()}:</strong> ${regCaught}/${regPokes.length}`;
-        genBreakdown.appendChild(regSpan);
+        const regChip = document.createElement('div');
+        regChip.className = `gen-stat ${activeDashFilter === reg ? 'active' : ''}`;
+        
+        regChip.innerHTML = `
+            <span class="reg-name">${reg.toUpperCase()}</span>
+            <span class="reg-count">${regCaught}/${regPokes.length}</span>
+        `;
+
+        regChip.onclick = () => {
+            activeDashFilter = (activeDashFilter === reg) ? "all" : reg;
+            regionFilter.value = activeDashFilter; // Sync the dropdown
+            render();
+        };
+        genBreakdown.appendChild(regChip);
     });
 }
 
 function togglePoke(id) {
     if (ownedIds.has(id)) ownedIds.delete(id);
     else ownedIds.add(id);
-    
     localStorage.setItem('pokeKeeper_owned', JSON.stringify([...ownedIds]));
     render();
 }
 
 function render() {
     const region = regionFilter.value;
+    activeDashFilter = region; // Sync dash with dropdown
     const status = statusFilter.value;
     const search = searchInput.value.toLowerCase();
     
@@ -91,24 +101,24 @@ function render() {
 }
 
 // Event Listeners
-regionFilter.addEventListener('change', render);
-statusFilter.addEventListener('change', render);
-searchInput.addEventListener('input', render);
-qualitySwitch.addEventListener('change', init);
+regionFilter.onchange = render;
+statusFilter.onchange = render;
+searchInput.oninput = render;
+qualitySwitch.onchange = init;
 
 // Backup/Restore
 document.getElementById('downloadBtn').onclick = () => {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify([...ownedIds]));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", "pokekeeper_backup.json");
-    downloadAnchor.click();
+    const dl = document.createElement('a');
+    dl.setAttribute("href", dataStr);
+    dl.setAttribute("download", "pokekeeper_backup.json");
+    dl.click();
 };
 
 document.getElementById('restoreInput').onchange = (e) => {
     const reader = new FileReader();
-    reader.onload = (event) => {
-        ownedIds = new Set(JSON.parse(event.target.result));
+    reader.onload = (ev) => {
+        ownedIds = new Set(JSON.parse(ev.target.result));
         localStorage.setItem('pokeKeeper_owned', JSON.stringify([...ownedIds]));
         render();
     };
