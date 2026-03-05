@@ -107,22 +107,52 @@ searchInput.oninput = render;
 qualitySwitch.onchange = init;
 
 // Backup/Restore
+// --- UPDATED DOWNLOAD BACKUP ---
 document.getElementById('downloadBtn').onclick = () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify([...ownedIds]));
+    // Convert Set to a comma-separated string
+    const idString = [...ownedIds].join(',');
+    
+    const backupData = {
+        type: "customPokemonIds",
+        settings: idString
+    };
+
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData));
     const dl = document.createElement('a');
     dl.setAttribute("href", dataStr);
     dl.setAttribute("download", "pokekeeper_backup.json");
     dl.click();
 };
 
+// --- UPDATED RESTORE FROM BACKUP ---
 document.getElementById('restoreInput').onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
     const reader = new FileReader();
     reader.onload = (ev) => {
-        ownedIds = new Set(JSON.parse(ev.target.result));
-        localStorage.setItem('pokeKeeper_owned', JSON.stringify([...ownedIds]));
-        render();
+        try {
+            const json = JSON.parse(ev.target.result);
+            
+            // Validation: Check for your custom type
+            if (json.type === "customPokemonIds" && typeof json.settings === "string") {
+                const importedArray = json.settings.split(',')
+                                         .filter(id => id !== "") // Remove empty strings
+                                         .map(Number);           // Convert to numbers
+
+                if (confirm(`Restore ${importedArray.length} Pokémon? This will overwrite current progress.`)) {
+                    ownedIds = new Set(importedArray);
+                    localStorage.setItem('pokeKeeper_owned', JSON.stringify([...ownedIds]));
+                    render();
+                }
+            } else {
+                alert("Error: This file is not a valid PokeKeeper backup.");
+            }
+        } catch (err) {
+            alert("Error: Failed to parse the JSON file.");
+        }
     };
-    reader.readAsText(e.target.files[0]);
+    reader.readAsText(file);
 };
 
 init();
