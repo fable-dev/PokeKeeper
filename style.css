@@ -57,6 +57,31 @@ input, select { padding: 10px; border-radius: 8px; border: none; flex: 1; min-wi
 
 .backup-settings { margin-top: 10px; display: flex; justify-content: center; gap: 10px; }
 .btn-secondary { background: rgba(255,255,255,0.2); border: 1px solid white; color: white; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
+.btn-danger {
+    background: #ff5252; /* Bright red */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.btn-danger:hover {
+    background: #b71c1c; /* Darker red on hover */
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+/* Ensure the settings bar wraps nicely on small screens */
+.backup-settings {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap; 
+}
 
 @media (max-width: 700px) {
     .header-main { flex-direction: column; gap: 10px; }
