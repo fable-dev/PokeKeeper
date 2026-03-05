@@ -155,4 +155,22 @@ document.getElementById('restoreInput').onchange = (e) => {
     reader.readAsText(file);
 };
 
+// Clear All Data
+document.getElementById('clearBtn').onclick = () => {
+    // First Confirmation
+    const firstCheck = confirm("Are you sure you want to delete ALL progress? This cannot be undone unless you have a backup file.");
+    
+    if (firstCheck) {
+        // Second Confirmation (The 'Are you REALLY sure' check)
+        const secondCheck = confirm("Final warning: This will reset your Pokédex to 0%. Continue?");
+        
+        if (secondCheck) {
+            ownedIds.clear();
+            localStorage.removeItem('pokeKeeper_owned');
+            render();
+            alert("All data has been cleared. Your journey begins anew!");
+        }
+    }
+};
+
 init();
